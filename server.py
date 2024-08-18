@@ -1,7 +1,7 @@
 import socket as sc
 
 class Response():
-    def __init__(self, content) -> None:
+    def __init__(self, content: str) -> None:
         self.response = {
             "version" : "HTTP/1.1",
             "status" : 200,
@@ -12,15 +12,16 @@ class Response():
             },
             "content" : content
         }
-
     
-    def encodeResponse(self):
-        encodedRes = f"{self.response["version"]} {self.response["version"]} {"OK " if self.response["status"] == 200 else "ERROR"}"
+    def responseToStr(self) -> str:
+        encodedRes = f"{self.response['version']} {str(self.response['status'])} {'OK ' if self.response['status'] == 200 else 'ERROR'}\r\n"
+        
+        for header, value in self.response["headers"].items():
+            encodedRes += f"{header}: {value}\r\n"
 
+        encodedRes += f"\n{content}"
 
-# "HTTP/1.1 200 OK\nServer: Python\nAccept-Ranges: bytes\nContent-Length: {len(content)}\nContent-Type: text/html\n\n{content}"
-
-        return encodedRes.encode()
+        return encodedRes
 
 def parseRequest(request_string : str): 
     request_string = request_string.split("\n")    
@@ -60,7 +61,9 @@ else:
             with open("index.html", "r") as file:
                 content = file.read()
 
-            print(parseRequest(request))
+            res = Response(content)
+            print(res.responseToStr())
+            client.send(res.responseToStr().encode())
             
             client.send(f"HTTP/1.1 200 OK\nServer: Python\nAccept-Ranges: bytes\nContent-Length: {len(content)}\nContent-Type: text/html\n\n{content}".encode())
             print("respoonse sent")            
