@@ -9,6 +9,8 @@ class Server():
         self.port = port 
         self.buff_size = buff_size
 
+        self.routes = {}
+
         self.sock = sc.socket(sc.AF_INET, sc.SOCK_STREAM)
         self.sock.setsockopt(sc.SOL_SOCKET, sc.SO_REUSEADDR, 1) # This unables the socket to be reuseable
         try : self.sock.bind((adresse,port))
@@ -27,12 +29,12 @@ class Server():
 
                 req = Request(request)
 
-                print(json.dumps(req.request, indent=2))
+                route = req.request['uri']
+                route_functions = self.routes[route]
+                res = Response()
+                for function in route_functions :
+                    function(req, res)
 
-                with open("index.html", "r") as file:
-                    content = file.read()
-
-                res = Response(content)
                 client.send(res.responseToStr().encode())
                 
                 print("respoonse sent")            
@@ -42,13 +44,9 @@ class Server():
         print("\nServer closed")            
         self.sock.close()
 
+    def get(self, route: str, *args):
+        if len(args) == 0:
+            raise ValueError("Callback function required")
+        
+        self.routes[route] = args
 
-
-
-PORT = 8080
-ADRESSE = "localhost"
-BUFFER_SIZE = 8*1024
-
-app = Server(ADRESSE, PORT, BUFFER_SIZE)
-
-app.run()

@@ -5,13 +5,13 @@ I built this project to deepen my backend knowlodge and understand the HTTP prot
 To test the project clone the project then go to the main directory and just run this commande :
 
 ```
-python server.py
+python app.py
 ```
 
 Finnaly you can make requests using Postman or your favorite browser to test the project
 
 > [!NOTE]
-> the server will run on **localhost:8080** you can change that in the "server.py" file by changing the adresse and port constants
+> the server will run on **localhost:8080** you can change that in the "app.py" file by changing the adresse and port constants
 
 > [!WARNING]
 > This project is still in developement
