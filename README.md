@@ -13,4 +13,5 @@ Finnaly you can make requests using Postman or your favorite browser to test the
 > [!NOTE]
 > the server will run on **localhost:8080** you can change that in the "server.py" file by changing the adresse and port constants
 
-I used [RFC 9110 HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html) to do the implementation
+> [!WARNING]
+> This project is still in developement
